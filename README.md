@@ -1,15 +1,15 @@
-# Python Development Project
+# API Data Flow
 
-This is a development container template for basic python development p
-rojects for use with GitHub Codespaces.
+## Overview
 
-## Contents
+This project is for managing CT-related data flow for external, public
+sources from API's to/from the [CT Open Data Portal](https://data.ct.gov/).
 
-This template uses uv to initialize a project upon container 
-creation and will sync with every start.
+## Usage
 
-A python-focused `.gitignore` is provided and everything is licensed 
-under the MIT License.
+This is for ***public-facing data*** only. Under no circumstances should
+content/data containing sensitive or potentially identifiable be pushed
+to this repository. 
 
 ## Github Actions
 
