@@ -1,0 +1,16 @@
+[project]
+name = "api-data-flow"
+version = "0.1.0"
+description = "Manage public data flow"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "polars>=1.30.0",
+    "requests>=2.32.4",
+    "sodapy>=2.2.0",
+]
+
+[dependency-groups]
+dev = [
+    "pre-commit>=4.2.0",
+]
