@@ -2,7 +2,7 @@ import polars as pl
 from pathlib import Path
 
 
-def csv_wrangle(target_file: Path) -> pl.LazyFrame:
+def csv_wrangle(targetfile: Path) -> pl.LazyFrame:
     """Wrangle starter .csv for creating api endpoints and features.
 
     Args:
@@ -16,21 +16,24 @@ def csv_wrangle(target_file: Path) -> pl.LazyFrame:
         IOError: For general I/O related errors.
 
     """
-    if not Path.exists(target_file):
-        raise FileNotFoundError(f"File path does not exist: {target_file}")
+    if not Path.exists(targetfile):
+        raise FileNotFoundError(f"File path does not exist: {targetfile}")
 
-    if not target_file.suffix == ".csv":
-        raise IOError(f"Expected a csv file. Found file type: {target_file.suffix}")
+    if not targetfile.suffix == ".csv":
+        raise IOError(f"Expected a csv file. Found file type: {targetfile.suffix}")
 
     # regex patterns
     group_pattern = r"\((.*)\)"
     ucgid_pattern = r"&ucgid=(.*)$"
+    domain_pattern = r"^(.+gov)"
 
-    targets = pl.scan_csv(target_file).with_columns(
+    targets = pl.scan_csv(targetfile).with_columns(
         pl.col("url").str.slice(28, 4).cast(pl.Int16).alias("year"),
         pl.col("url").str.slice(40, 1).cast(pl.Int16).alias("acs_type"),
         pl.col("url").str.extract(group_pattern).alias("group"),
         pl.col("url").str.extract(ucgid_pattern).alias("ucgid"),
+        pl.col("url").str.extract(domain_pattern).alias("domain"),
+        pl.col("url").str.replace(domain_pattern, "").alias("end"),
     )
 
     return targets
