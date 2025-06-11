@@ -13,5 +13,5 @@ csv_path = data_path / "raw" / "census-api.csv"
 lf = wgl.csv_wrangle(csv_path)
 
 # write parquet
-parq_path = data_path / "acs-api.parquet"
+parq_path = data_path / "targets" / "acs-api.parquet"
 lf.sink_parquet(parq_path)
