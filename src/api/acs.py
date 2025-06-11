@@ -13,5 +13,6 @@ def grab_file_targets(filepath: None | Path = None) -> pl.DataFrame:
     return pl.read_parquet(filepath)
 
 
-def grab_api_data(endpoint: str | None) -> pl.LazyFrame:
+def grab_api_data(endpoint: str | None) -> pl.LazyFrame | None:
     return None
+
