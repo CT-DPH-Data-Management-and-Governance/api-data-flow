@@ -7,6 +7,7 @@ requires-python = ">=3.13"
 dependencies = [
     "pathlib>=1.0.1",
     "polars>=1.30.0",
+    "python-dotenv>=1.1.0",
     "requests>=2.32.4",
     "sodapy>=2.2.0",
 ]
