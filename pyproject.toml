@@ -5,6 +5,7 @@ description = "Manage public data flow"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
+    "dataops",
     "pathlib>=1.0.1",
     "polars>=1.30.0",
     "python-dotenv>=1.1.0",
@@ -16,3 +17,6 @@ dependencies = [
 dev = [
     "pre-commit>=4.2.0",
 ]
+
+[tool.uv.sources]
+dataops = { git = "https://github.com/CT-DPH-Data-Management-and-Governance/api-data-ops.git" }
