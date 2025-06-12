@@ -29,3 +29,7 @@ var05 = var.read_acs_var_html(2023, 5)
 for url, data in data.items():
     print(f"\nData from {url}:")
     print(data)
+
+testcase = data["https://api.census.gov/data/2023/acs/acs1/subject?get=group(S2301)&ucgid=0400000US09"]
+
+#TODO join testcase up to var names
