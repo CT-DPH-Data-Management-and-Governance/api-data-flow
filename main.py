@@ -9,7 +9,7 @@ load_dotenv()
 CENSUS_API_KEY = os.getenv("CENSUS_API_KEY")
 
 
-def fetch_data(urls: list[str]) -> pl.DataFrame:
+def fetch_data(urls: list[str]) -> pl.LazyFrame:
     all_frames = []
 
     for url in urls:
@@ -20,7 +20,7 @@ def fetch_data(urls: list[str]) -> pl.DataFrame:
     return pl.concat(all_frames)
 
 
-def local_urls() -> list:
+def local_urls() -> list[str]:
     path = Path.cwd() / "data" / "raw" / "census-api.csv"
     return pl.read_csv(path).to_series().to_list()
 
