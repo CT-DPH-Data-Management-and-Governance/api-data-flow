@@ -141,7 +141,7 @@ wheels = [
 [[package]]
 name = "dataops"
 version = "0.1.0"
-source = { git = "https://github.com/CT-DPH-Data-Management-and-Governance/api-data-ops.git#d241c6b881a1736dfb467d1bd33cfa3efd0056be" }
+source = { git = "https://github.com/CT-DPH-Data-Management-and-Governance/api-data-ops.git#05f1be968c141222251cd3c8d30271ffa4c91ad3" }
 dependencies = [
     { name = "asyncio" },
     { name = "bs4" },
