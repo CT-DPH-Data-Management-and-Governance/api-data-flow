@@ -9,5 +9,6 @@ jobs:
       - uses: actions/checkout@v4
       - name: ruff check 
         uses: astral-sh/ruff-action@v3
+        with:
           version: "0.12.0"
           checksum: "adfe2c1e21ea010d2a040054d0605c74e918086d2f8034bb63d9c39e95d8a55c"
