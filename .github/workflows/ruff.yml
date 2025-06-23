@@ -11,4 +11,4 @@ jobs:
         uses: astral-sh/ruff-action@v3
         with:
           version: "0.12.0"
-          checksum: "adfe2c1e21ea010d2a040054d0605c74e918086d2f8034bb63d9c39e95d8a55c"
+          checksum: "1a2194e90cc4836b0c56820eb282faf17180db2ee4572f91c91a2d6a432a2306"
