@@ -8,7 +8,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: ruff check 
-        uses: astral-sh/ruff-action@v3
+        uses: astral-sh/ruff-action@eaf0ecdd668ceea36159ff9d91882c9795d89b49
         with:
           version: "0.12.0"
           checksum: "1a2194e90cc4836b0c56820eb282faf17180db2ee4572f91c91a2d6a432a2306"
