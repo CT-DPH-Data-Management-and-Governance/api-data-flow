@@ -7,4 +7,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: astral-sh/ruff-action@v3
+      - name: ruff check 
+        uses: astral-sh/ruff-action@v3
+        with:
+          version: "0.12.0"
+          checksum: "87f0feb21a1af67195bebf94d811770393f9f447"
