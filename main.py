@@ -21,8 +21,16 @@ def fetch_data(urls: list[str]) -> pl.LazyFrame:
 
 
 def local_urls() -> list[str]:
-    path = Path.cwd() / "data" / "raw" / "census-api.csv"
-    return pl.read_csv(path).unique().to_series().to_list()
+    path = Path.cwd() / "data" / "raw"  # / "census-api.csv"
+    path = path.glob("*.csv")
+
+    paths = pl.DataFrame()
+
+    for file in path:
+        contents = pl.read_csv(file).drop_nulls().unique()
+        paths = pl.concat([paths, contents])
+
+    return paths.to_series().to_list()
 
 
 def main():
