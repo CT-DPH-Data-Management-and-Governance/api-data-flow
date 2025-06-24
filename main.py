@@ -22,12 +22,13 @@ def fetch_data(urls: list[str]) -> pl.LazyFrame:
 
 def local_urls() -> list[str]:
     path = Path.cwd() / "data" / "raw" / "census-api.csv"
-    return pl.read_csv(path).to_series().to_list()
+    return pl.read_csv(path).unique().to_series().to_list()
 
 
 def main():
     print("pulling from census apis")
     lf = fetch_data(local_urls())
+
     lf.sink_parquet("whole-game.parquet")
 
 
