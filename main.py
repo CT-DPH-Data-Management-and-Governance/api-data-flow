@@ -4,12 +4,21 @@ from pathlib import Path
 from dotenv import load_dotenv
 from datetime import datetime
 import os
+from sodapy import Socrata
 
+# environmental variables/secrets
 load_dotenv()
 
 CENSUS_API_KEY = os.getenv("CENSUS_API_KEY")
+TABLE_SOURCE = os.getenv("TABLE_SOURCE")
+TABLE_TARGET = os.getenv("TABLE_TARGET")
+USERNAME = os.getenv("USERNAME")
+PASSWORD = os.getenv("PASSWORD")
+TOKEN = os.getenv("TOKEN")
+DOMAIN = os.getenv("DOMAIN")
 
 
+# grab data from endpoints
 def fetch_data(urls: list[str]) -> pl.LazyFrame:
     all_frames = []
 
@@ -61,6 +70,12 @@ def local_urls() -> list[str]:
         paths = pl.concat([paths, contents])
 
     return paths.to_series().to_list()
+
+
+def table_urls() -> list[str]:
+    with Socrata(DOMAIN, TOKEN, USERNAME, PASSWORD) as client:
+        urls = client.get_all(TABLE_SOURCE)
+        # TODO make a dataframe
 
 
 def main():
