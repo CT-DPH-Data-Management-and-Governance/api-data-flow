@@ -1,23 +1,21 @@
 [project]
 name = "api-data-flow"
-version = "0.2.0"
+version = "0.3.0"
 description = "Manage public data flow"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
-    "dataops",
-    "logging>=0.4.9.6",
-    "pathlib>=1.0.1",
-    "polars>=1.30.0",
-    "python-dotenv>=1.1.0",
-    "requests>=2.32.4",
-    "sodapy>=2.2.0",
+  "dataops",
+  "logging>=0.4.9.6",
+  "pathlib>=1.0.1",
+  "polars>=1.30.0",
+  "python-dotenv>=1.1.0",
+  "requests>=2.32.4",
+  "sodapy>=2.2.0",
 ]
 
 [dependency-groups]
-dev = [
-    "pre-commit>=4.2.0",
-]
+dev = ["pre-commit>=4.2.0"]
 
 [tool.uv.sources]
 dataops = { git = "https://github.com/CT-DPH-Data-Management-and-Governance/api-data-ops.git" }
