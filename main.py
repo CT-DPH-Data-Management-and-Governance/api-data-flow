@@ -5,6 +5,7 @@ from datetime import datetime
 import os
 import logging
 from sodapy import Socrata
+import sys
 
 logging.basicConfig(
     level=logging.INFO, format="[%(asctime)s] - %(levelname)s - %(message)s"
@@ -21,6 +22,9 @@ if load_dotenv():
     TOKEN = os.getenv("TOKEN")
     DOMAIN = os.getenv("DOMAIN")
     logging.info("Environmental variables successfully loaded.")
+else:
+    logging.critical("Environmental variables cannot be loaded - exiting process.")
+    sys.exit(1)
 
 
 def fetch_data(urls: list[str]) -> pl.LazyFrame:
