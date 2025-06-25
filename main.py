@@ -67,7 +67,12 @@ def table_urls() -> list[str]:
     """
     with Socrata(DOMAIN, TOKEN, USERNAME, PASSWORD) as client:
         urls = client.get_all(TABLE_SOURCE)
-        # TODO make a dataframe
+        return (
+            pl.DataFrame(urls)
+            .select(pl.col("url").struct.unnest())
+            .to_series()
+            .to_list()
+        )
 
 
 def main():
@@ -75,6 +80,7 @@ def main():
     Entrypoint into the census api data flow app.
     """
 
+    lf = fetch_data(table_urls())
     lf.sink_parquet("whole-game.parquet")
 
 
