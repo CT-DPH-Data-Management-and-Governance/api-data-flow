@@ -6,6 +6,7 @@ readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
     "dataops",
+    "logging>=0.4.9.6",
     "pathlib>=1.0.1",
     "polars>=1.30.0",
     "python-dotenv>=1.1.0",
