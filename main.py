@@ -3,9 +3,15 @@ import polars as pl
 from dotenv import load_dotenv
 from datetime import datetime
 import os
+import logging
 from sodapy import Socrata
 
+logging.basicConfig(
+    level=logging.INFO, format="[%(asctime)s] - %(levelname)s - %(message)s"
+)
+
 # environmental variables/secrets
+logging.info("Attempting to load environmental variables.")
 if load_dotenv():
     CENSUS_API_KEY = os.getenv("CENSUS_API_KEY")
     TABLE_SOURCE = os.getenv("TABLE_SOURCE")
@@ -14,6 +20,7 @@ if load_dotenv():
     PASSWORD = os.getenv("PASSWORD")
     TOKEN = os.getenv("TOKEN")
     DOMAIN = os.getenv("DOMAIN")
+    logging.info("Environmental variables successfully loaded.")
 
 
 def fetch_data(urls: list[str]) -> pl.LazyFrame:
@@ -25,7 +32,6 @@ def fetch_data(urls: list[str]) -> pl.LazyFrame:
 
     for url in urls:
         df = CensusAPIEndpoint.from_url(url).fetch_tidy_data().lazy()
-        print(df.head())
         all_frames.append(df)
 
     all_frames = pl.concat(all_frames)
@@ -82,10 +88,16 @@ def ship_it(data: list):
 def main():
     """Entrypoint into the census api data flow app."""
 
+    logging.info("Fetching endpoint data.")
     lf = fetch_data(table_urls())
+    logging.info("Endpoint data lazily loaded.")
+
     now = datetime.today().strftime("%Y-%m-%d")
     data = lf.with_columns(pl.lit(now).alias("date_pulled")).collect().to_dicts()
+
+    logging.info("Pushing data to the ODP.")
     ship_it(data)
+    logging.info("Data successfully pushed to the ODP.")
 
 
 if __name__ == "__main__":
