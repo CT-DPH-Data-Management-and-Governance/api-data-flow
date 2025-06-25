@@ -1,7 +1,5 @@
-from dataops.models import CensusAPIEndpoint
 import polars as pl
 from dotenv import load_dotenv
-from datetime import datetime
 import os
 from sodapy import Socrata
 
