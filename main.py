@@ -16,7 +16,6 @@ if load_dotenv():
     DOMAIN = os.getenv("DOMAIN")
 
 
-# grab data from endpoints
 def fetch_data(urls: list[str]) -> pl.LazyFrame:
     """
     Retrieve data from census api endpoints, wrangle, and make human-readable.
@@ -62,9 +61,7 @@ def fetch_data(urls: list[str]) -> pl.LazyFrame:
 
 
 def table_urls() -> list[str]:
-    """
-    Retrieve a list of public census api endpoints.
-    """
+    """Retrieve a list of public census api endpoints."""
     with Socrata(DOMAIN, TOKEN, USERNAME, PASSWORD) as client:
         urls = client.get_all(TABLE_SOURCE)
         return (
@@ -75,13 +72,18 @@ def table_urls() -> list[str]:
         )
 
 
+def ship_it(data: list):
+    with Socrata(DOMAIN, TOKEN, USERNAME, PASSWORD) as client:
+        client.replace(TABLE_TARGET, data)
+
+
 def main():
-    """
-    Entrypoint into the census api data flow app.
-    """
+    """Entrypoint into the census api data flow app."""
 
     lf = fetch_data(table_urls())
-    lf.sink_parquet("whole-game.parquet")
+    now = datetime.today().strftime("%Y-%m-%d")
+    data = lf.with_columns(pl.lit(now).alias("date_pulled")).collect().to_dicts()
+    ship_it(data)
 
 
 if __name__ == "__main__":
