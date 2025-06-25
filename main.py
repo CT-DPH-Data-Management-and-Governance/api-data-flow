@@ -1,6 +1,5 @@
 from dataops.models import CensusAPIEndpoint
 import polars as pl
-from pathlib import Path
 from dotenv import load_dotenv
 from datetime import datetime
 import os
@@ -57,19 +56,6 @@ def fetch_data(urls: list[str]) -> pl.LazyFrame:
     )
 
     return all_frames
-
-
-def local_urls() -> list[str]:
-    path = Path.cwd() / "data" / "raw"  # / "census-api.csv"
-    path = path.glob("*.csv")
-
-    paths = pl.DataFrame()
-
-    for file in path:
-        contents = pl.read_csv(file).drop_nulls().unique()
-        paths = pl.concat([paths, contents])
-
-    return paths.to_series().to_list()
 
 
 def table_urls() -> list[str]:
