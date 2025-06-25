@@ -31,6 +31,7 @@ def fetch_data(urls: list[str]) -> pl.LazyFrame:
     all_frames = []
 
     for url in urls:
+        logging.info(f"Fetching data from URL: {url}")
         df = CensusAPIEndpoint.from_url(url).fetch_tidy_data().lazy()
         all_frames.append(df)
 
