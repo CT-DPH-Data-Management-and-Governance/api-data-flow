@@ -6,19 +6,22 @@ import os
 from sodapy import Socrata
 
 # environmental variables/secrets
-load_dotenv()
-
-CENSUS_API_KEY = os.getenv("CENSUS_API_KEY")
-TABLE_SOURCE = os.getenv("TABLE_SOURCE")
-TABLE_TARGET = os.getenv("TABLE_TARGET")
-USERNAME = os.getenv("USERNAME")
-PASSWORD = os.getenv("PASSWORD")
-TOKEN = os.getenv("TOKEN")
-DOMAIN = os.getenv("DOMAIN")
+if load_dotenv():
+    CENSUS_API_KEY = os.getenv("CENSUS_API_KEY")
+    TABLE_SOURCE = os.getenv("TABLE_SOURCE")
+    TABLE_TARGET = os.getenv("TABLE_TARGET")
+    USERNAME = os.getenv("USERNAME")
+    PASSWORD = os.getenv("PASSWORD")
+    TOKEN = os.getenv("TOKEN")
+    DOMAIN = os.getenv("DOMAIN")
 
 
 # grab data from endpoints
 def fetch_data(urls: list[str]) -> pl.LazyFrame:
+    """
+    Retrieve data from census api endpoints, wrangle, and make human-readable.
+    """
+
     all_frames = []
 
     for url in urls:
@@ -59,14 +62,18 @@ def fetch_data(urls: list[str]) -> pl.LazyFrame:
 
 
 def table_urls() -> list[str]:
+    """
+    Retrieve a list of public census api endpoints.
+    """
     with Socrata(DOMAIN, TOKEN, USERNAME, PASSWORD) as client:
         urls = client.get_all(TABLE_SOURCE)
         # TODO make a dataframe
 
 
 def main():
-    print("pulling from census apis")
-    lf = fetch_data(local_urls())
+    """
+    Entrypoint into the census api data flow app.
+    """
 
     lf.sink_parquet("whole-game.parquet")
 
