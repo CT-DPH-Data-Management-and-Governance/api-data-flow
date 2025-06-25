@@ -66,6 +66,8 @@ def table_urls() -> list[str]:
         urls = client.get_all(TABLE_SOURCE)
         return (
             pl.DataFrame(urls)
+            .with_columns(pl.col("active").cast(pl.Int8).alias("active"))
+            .filter(pl.col("active").eq(1))
             .select(pl.col("url").struct.unnest())
             .to_series()
             .to_list()
