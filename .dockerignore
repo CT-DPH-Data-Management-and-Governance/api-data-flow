@@ -1,0 +1,12 @@
+# Exclude the project virtual environment from image builds
+.venv
+data
+src
+*.csv
+*.parquet
+dist
+.devcontainer
+.github
+.env
+.gitignore
+.pre-commit-config.yaml
