@@ -1,6 +1,6 @@
 [project]
 name = "api-data-flow"
-version = "0.5.0"
+version = "0.5.1"
 description = "Manage public data flow"
 readme = "README.md"
 requires-python = ">=3.13"
