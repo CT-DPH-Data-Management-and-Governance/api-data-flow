@@ -82,23 +82,27 @@ def fetch_source() -> pl.DataFrame:
     return pl.DataFrame(source)
 
 
-def pull_urls() -> list[str]:
+def pull_urls(df: pl.DataFrame) -> list[str]:
     """Retrieve a list of public census api endpoints."""
-    urls = fetch_source()
 
-    return (
-        pl.DataFrame(urls)
-        .with_columns(pl.col("active").cast(pl.Int8).alias("active"))
-        .filter(pl.col("active").eq(1))
-        .select(pl.col("url").struct.unnest())
-        .to_series()
-        .to_list()
-    )
+    return df.select(pl.col("url").struct.unnest()).to_series().to_list()
 
 
 def ship_it(data: list):
     with Socrata(DOMAIN, TOKEN, USERNAME, PASSWORD) as client:
         client.replace(TABLE_TARGET, data)
+
+
+def only_new(cutoff: dt.date = CUTOFF):
+    df = fetch_source()
+    new = df.with_columns(pl.col("date_last_pulled").str.to_datetime()).filter(
+        (pl.col("date_last_pulled").le(cutoff)) & (pl.col("active").eq("1"))
+    )
+    return new
+
+
+def update_source():
+    None
 
 
 def main():
