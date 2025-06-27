@@ -1,7 +1,7 @@
 from dataops.models import CensusAPIEndpoint
 import polars as pl
 from dotenv import load_dotenv
-from datetime import datetime
+import datetime as dt
 import os
 import logging
 from sodapy import Socrata
@@ -10,6 +10,10 @@ import sys
 logging.basicConfig(
     level=logging.INFO, format="[%(asctime)s] - %(levelname)s - %(message)s"
 )
+
+today = dt.datetime.today().date()
+TODAY = today.strftime("%Y-%m-%d")
+CUTOFF = pl.Series([today]).dt.offset_by("-6mo").item()
 
 # environmental variables/secrets
 logging.info("Attempting to load environmental variables.")
