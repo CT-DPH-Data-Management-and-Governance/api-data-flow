@@ -65,7 +65,6 @@ def fetch_data(urls: list[str]) -> pl.LazyFrame:
         .unique()
         .join(url_id, on="instance_id")
         .with_row_index("row_id")
-        .with_columns(date_pulled=datetime.now())
     )
 
     return all_frames
