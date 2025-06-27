@@ -112,14 +112,25 @@ def main():
     """Entrypoint into the census api data flow app."""
 
     logging.info("Fetching endpoint data.")
-    lf = fetch_data(pull_urls())
-    logging.info("Endpoint data lazily loaded.")
+    source = only_new()
 
-    data = lf.with_columns(pl.lit(TODAY).alias("date_pulled")).collect().to_dicts()
+    if not source.is_empty():
+        urls = pull_urls(source)
+        lf = fetch_data(urls)
+        logging.info("Endpoint data lazily loaded.")
 
-    logging.info("Pushing data to the ODP.")
-    ship_it(data)
-    logging.info("Data successfully pushed to the ODP.")
+        data = lf.with_columns(pl.lit(TODAY).alias("date_pulled")).collect().to_dicts()
+
+        logging.info("Pushing data to the ODP.")
+        ship_it(data)
+        logging.info("Data successfully pushed to the ODP.")
+
+        logging.info("Updating Source metadata.")
+        update_source(source)
+        logging.info("Metadata sucessfully updated.")
+
+    else:
+        logging.info("No eligible endpoints - ending process.")
 
 
 if __name__ == "__main__":
