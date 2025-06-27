@@ -1,7 +1,7 @@
 from dataops.models import CensusAPIEndpoint
 import polars as pl
 from dotenv import load_dotenv
-from datetime import datetime
+import datetime as dt
 import os
 import logging
 from sodapy import Socrata
@@ -10,6 +10,10 @@ import sys
 logging.basicConfig(
     level=logging.INFO, format="[%(asctime)s] - %(levelname)s - %(message)s"
 )
+
+today = dt.datetime.today().date()
+TODAY = today.strftime("%Y-%m-%d")
+CUTOFF = pl.Series([today]).dt.offset_by("-6mo").item()
 
 # environmental variables/secrets
 logging.info("Attempting to load environmental variables.")
@@ -65,24 +69,23 @@ def fetch_data(urls: list[str]) -> pl.LazyFrame:
         .unique()
         .join(url_id, on="instance_id")
         .with_row_index("row_id")
-        .with_columns(date_pulled=datetime.now())
     )
 
     return all_frames
 
 
-def table_urls() -> list[str]:
-    """Retrieve a list of public census api endpoints."""
+def fetch_source() -> pl.DataFrame:
+    """Retrieve the source dataframe"""
     with Socrata(DOMAIN, TOKEN, USERNAME, PASSWORD) as client:
-        urls = client.get_all(TABLE_SOURCE)
-        return (
-            pl.DataFrame(urls)
-            .with_columns(pl.col("active").cast(pl.Int8).alias("active"))
-            .filter(pl.col("active").eq(1))
-            .select(pl.col("url").struct.unnest())
-            .to_series()
-            .to_list()
-        )
+        source = client.get_all(TABLE_SOURCE)
+
+    return pl.DataFrame(source)
+
+
+def pull_urls(df: pl.DataFrame) -> list[str]:
+    """Retrieve a list of public census api endpoints."""
+
+    return df.select(pl.col("url").struct.unnest()).to_series().to_list()
 
 
 def ship_it(data: list):
@@ -90,19 +93,44 @@ def ship_it(data: list):
         client.replace(TABLE_TARGET, data)
 
 
+def only_new(cutoff: dt.date = CUTOFF):
+    df = fetch_source()
+    new = df.with_columns(pl.col("date_last_pulled").str.to_datetime()).filter(
+        (pl.col("date_last_pulled").le(cutoff)) & (pl.col("active").eq("1"))
+    )
+    return new
+
+
+def update_source(source: pl.DataFrame):
+    new = source.with_columns(pl.lit(TODAY).alias("date_last_pulled")).to_dicts()
+
+    with Socrata(DOMAIN, TOKEN, USERNAME, PASSWORD) as client:
+        client.upsert(TABLE_SOURCE, new)
+
+
 def main():
     """Entrypoint into the census api data flow app."""
 
     logging.info("Fetching endpoint data.")
-    lf = fetch_data(table_urls())
-    logging.info("Endpoint data lazily loaded.")
+    source = only_new()
 
-    now = datetime.today().strftime("%Y-%m-%d")
-    data = lf.with_columns(pl.lit(now).alias("date_pulled")).collect().to_dicts()
+    if not source.is_empty():
+        urls = pull_urls(source)
+        lf = fetch_data(urls)
+        logging.info("Endpoint data lazily loaded.")
 
-    logging.info("Pushing data to the ODP.")
-    ship_it(data)
-    logging.info("Data successfully pushed to the ODP.")
+        data = lf.with_columns(pl.lit(TODAY).alias("date_pulled")).collect().to_dicts()
+
+        logging.info("Pushing data to the ODP.")
+        ship_it(data)
+        logging.info("Data successfully pushed to the ODP.")
+
+        logging.info("Updating Source metadata.")
+        update_source(source)
+        logging.info("Metadata sucessfully updated.")
+
+    else:
+        logging.info("No eligible endpoints - ending process.")
 
 
 if __name__ == "__main__":
