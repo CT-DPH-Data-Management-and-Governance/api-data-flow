@@ -2,6 +2,7 @@
 
 docker run \
     --rm \
-    --env-file ./.env \
+    --env-file .env \
     --volume .:/app \
-    --volume /app/.venv 
+    --volume /app/.venv \
+    census 
