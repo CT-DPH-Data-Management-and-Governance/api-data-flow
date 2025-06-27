@@ -39,7 +39,7 @@ def fetch_data(endpoints: list[str]) -> pl.LazyFrame:
     all_frames = []
 
     for endpoint in endpoints:
-        logging.info(f"Fetching data from URL: {endpoints}")
+        logging.info(f"Fetching data from URL: {endpoint}")
         df = CensusAPIEndpoint.from_url(endpoint).fetch_tidy_data().lazy()
         all_frames.append(df)
 
@@ -127,7 +127,7 @@ def main():
 
         logging.info("Updating Source metadata.")
         update_source(source)
-        logging.info("Metadata sucessfully updated.")
+        logging.info("Metadata successfully updated.")
 
     else:
         logging.info("No eligible endpoints - ending process.")
