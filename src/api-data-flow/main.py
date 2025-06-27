@@ -112,8 +112,7 @@ def main():
     lf = fetch_data(pull_urls())
     logging.info("Endpoint data lazily loaded.")
 
-    now = datetime.today().strftime("%Y-%m-%d")
-    data = lf.with_columns(pl.lit(now).alias("date_pulled")).collect().to_dicts()
+    data = lf.with_columns(pl.lit(TODAY).alias("date_pulled")).collect().to_dicts()
 
     logging.info("Pushing data to the ODP.")
     ship_it(data)
