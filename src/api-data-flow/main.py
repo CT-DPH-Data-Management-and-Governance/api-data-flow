@@ -31,16 +31,16 @@ else:
     sys.exit(1)
 
 
-def fetch_data(urls: list[str]) -> pl.LazyFrame:
+def fetch_data(endpoints: list[str]) -> pl.LazyFrame:
     """
     Retrieve data from census api endpoints, wrangle, and make human-readable.
     """
 
     all_frames = []
 
-    for url in urls:
-        logging.info(f"Fetching data from URL: {url}")
-        df = CensusAPIEndpoint.from_url(url).fetch_tidy_data().lazy()
+    for endpoint in endpoints:
+        logging.info(f"Fetching data from URL: {endpoint}")
+        df = CensusAPIEndpoint.from_url(endpoint).fetch_tidy_data().lazy()
         all_frames.append(df)
 
     all_frames = pl.concat(all_frames)
@@ -82,10 +82,10 @@ def fetch_source() -> pl.DataFrame:
     return pl.DataFrame(source)
 
 
-def pull_urls(df: pl.DataFrame) -> list[str]:
+def pull_endpoints(df: pl.DataFrame) -> list[str]:
     """Retrieve a list of public census api endpoints."""
 
-    return df.select(pl.col("url").struct.unnest()).to_series().to_list()
+    return df.select(pl.col("endpoint").struct.unnest()).to_series().to_list()
 
 
 def ship_it(data: list):
@@ -115,8 +115,8 @@ def main():
     source = only_new()
 
     if not source.is_empty():
-        urls = pull_urls(source)
-        lf = fetch_data(urls)
+        endpoints = pull_endpoints(source)
+        lf = fetch_data(endpoints)
         logging.info("Endpoint data lazily loaded.")
 
         data = lf.with_columns(pl.lit(TODAY).alias("date_pulled")).collect().to_dicts()
@@ -127,7 +127,7 @@ def main():
 
         logging.info("Updating Source metadata.")
         update_source(source)
-        logging.info("Metadata sucessfully updated.")
+        logging.info("Metadata successfully updated.")
 
     else:
         logging.info("No eligible endpoints - ending process.")
