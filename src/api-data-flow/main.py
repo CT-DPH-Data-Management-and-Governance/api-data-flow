@@ -101,7 +101,7 @@ def main():
     """Entrypoint into the census api data flow app."""
 
     logging.info("Fetching endpoint data.")
-    lf = fetch_data(table_urls())
+    lf = fetch_data(pull_urls())
     logging.info("Endpoint data lazily loaded.")
 
     now = datetime.today().strftime("%Y-%m-%d")
