@@ -74,14 +74,22 @@ def table_urls() -> list[str]:
     """Retrieve a list of public census api endpoints."""
     with Socrata(DOMAIN, TOKEN, USERNAME, PASSWORD) as client:
         urls = client.get_all(TABLE_SOURCE)
-        return (
-            pl.DataFrame(urls)
-            .with_columns(pl.col("active").cast(pl.Int8).alias("active"))
-            .filter(pl.col("active").eq(1))
-            .select(pl.col("url").struct.unnest())
-            .to_series()
-            .to_list()
-        )
+
+    return pl.DataFrame(urls)
+
+
+def pull_urls() -> list[str]:
+    """Retrieve a list of public census api endpoints."""
+    urls = fetch_source()
+
+    return (
+        pl.DataFrame(urls)
+        .with_columns(pl.col("active").cast(pl.Int8).alias("active"))
+        .filter(pl.col("active").eq(1))
+        .select(pl.col("url").struct.unnest())
+        .to_series()
+        .to_list()
+    )
 
 
 def ship_it(data: list):
