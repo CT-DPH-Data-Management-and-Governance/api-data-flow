@@ -74,12 +74,12 @@ def fetch_data(urls: list[str]) -> pl.LazyFrame:
     return all_frames
 
 
-def table_urls() -> list[str]:
-    """Retrieve a list of public census api endpoints."""
+def fetch_source() -> pl.DataFrame:
+    """Retrieve the source dataframe"""
     with Socrata(DOMAIN, TOKEN, USERNAME, PASSWORD) as client:
-        urls = client.get_all(TABLE_SOURCE)
+        source = client.get_all(TABLE_SOURCE)
 
-    return pl.DataFrame(urls)
+    return pl.DataFrame(source)
 
 
 def pull_urls() -> list[str]:
