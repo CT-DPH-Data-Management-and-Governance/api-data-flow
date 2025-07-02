@@ -31,9 +31,11 @@ This is for ***public-facing data*** only. Under no circumstances should
 content/data containing sensitive or potentially identifiable be pushed
 to this repository. 
 
+
+### Environmental Variables
+
 Currently, for ease of reuse, the app expects some environmental variables
 to exist in order to run.
-
 
 - CENSUS_API_KEY: Your Census API key.
 - TABLE_SOURCE: The Open Data Platform "Four by Four" [Identifier](https://dev.socrata.com/docs/endpoints).
@@ -46,19 +48,46 @@ to exist in order to run.
 > Take care not to print, or commit sensitive information and/or 
 > environmental variables to your repos and logs.
 
+### UV
+
+This app currently uses [uv](https://github.com/astral-sh/uv) for managing dependencies
+and exectuion. `uv` is included in the provided codespace devcontainer.json. Otherwise
+users should have it installed locally. Read the `uv` [installation instructions](https://github.com/astral-sh/ruff?tab=readme-ov-file#installation)
+on GitHub for steps on how install it your local environment.
+
+### Running the App
+
+- Locally: 
+    - Clone the repo.
+    - Set the required environmental variables.
+    - Ensure `uv` is installed. 
+    - Inside of the terminal, `cd` to the repo folder and run `uv run src/api-data-flow/main.py`.
+- Docker
+    - Clone the repo.
+    - Execute the `build.sh` file to build the image.
+    - Execute the `run.sh` file to run the container and pull data from the Census API to your destionation table.
+
 ## Developer Experience
 
 ### Devcontainers
 
-In this repo is a template `.devcontainer.json` for developers who prefer to work inside
+In this repo is a template `devcontainer.json` for developers who prefer to work inside
 codespaces or containers.
 
 ### Github Actions
 
-`Ruff` is used to check the project on a push or pull request.
+[Ruff](https://github.com/astral-sh/ruff) is used to check the project on a push or pull request.
+If using a GitHub Codespace with the devcontainer.json provided `Ruff` will automatically
+format code on save as well.
 
 ### Pre-Commit
 
 [pre-commit](https://pre-commit.com/) is used and configured to have `Ruff`
 fix and format code in a commit. It will block the commit until the issues
 are resolved and/or the suggested fixes are committed.
+
+### Weekly Dependabot Scans
+
+There is a provided `dependabot.yml` that directs GitHub's [dependabot](https://docs.github.com/en/code-security/getting-started/dependabot-quickstart-guide#about-dependabot)
+to scan for vulnerabilities and security updates weekly.  Dependabot scans
+the `devcontainers` and `pip` ecosystems.
