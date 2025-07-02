@@ -8,7 +8,7 @@ Not enough humans to do the downloading? Then this app might be a solution
 to your data problem. Sorry to hear about the humans though - Good luck
 with that.
 
-Designed to work with the Open Data Platfrom this app can be molded
+Designed to work with the Open Data Platform this app can be molded
 to look a table of endpoints on the platform, and will pull and wrangle
 those data and ship them off as one unified table back to a different
 table on the platform. 
@@ -23,7 +23,7 @@ infrastructure as code...err, well, tables at least!
 
 This project is for managing CT-related data flow for external, public
 sources from API's to/from the [CT Open Data Portal](https://data.ct.gov/).
-But others are welcome to use an adapt to their specific needs.
+But others are welcome to use and adapt to their specific needs.
 
 ## Usage
 
@@ -41,7 +41,7 @@ to exist in order to run.
 - TABLE_SOURCE: The Open Data Platform "Four by Four" [Identifier](https://dev.socrata.com/docs/endpoints).
 - TABLE_TARGET: The Destination table for the data on the Open Data Platform.
 - USERNAME: Open Data Platform Username - if needed.
-- PASSWORD: Open Data Platfrom Password - if needed.
+- PASSWORD: Open Data Platform Password - if needed.
 - TOKEN: Open Data Platform Application [token](https://dev.socrata.com/docs/app-tokens.html).
 - DOMAIN: Domain name of Portal e.g. [data.ct.gov](https://data.ct.gov)
 
@@ -51,7 +51,7 @@ to exist in order to run.
 ### UV
 
 This app currently uses [uv](https://github.com/astral-sh/uv) for managing dependencies
-and exectuion. `uv` is included in the provided codespace devcontainer.json. Otherwise
+and execution. `uv` is included in the provided codespace devcontainer.json. Otherwise
 users should have it installed locally. Read the `uv` [installation instructions](https://github.com/astral-sh/ruff?tab=readme-ov-file#installation)
 on GitHub for steps on how install it your local environment.
 
@@ -65,7 +65,7 @@ on GitHub for steps on how install it your local environment.
 - Docker
     - Clone the repo.
     - Execute the `build.sh` file to build the image.
-    - Execute the `run.sh` file to run the container and pull data from the Census API to your destionation table.
+    - Execute the `run.sh` file to run the container and pull data from the Census API to your destination table.
 
 ## Developer Experience
 
