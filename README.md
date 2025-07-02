@@ -25,6 +25,9 @@ This project is for managing CT-related data flow for external, public
 sources from API's to/from the [CT Open Data Portal](https://data.ct.gov/).
 But others are welcome to use and adapt to their specific needs.
 
+The core of this app makes use of our python library (in active development) for working with 
+the [Census API](https://github.com/CT-DPH-Data-Management-and-Governance/api-data-ops).
+
 ## Usage
 
 This is for ***public-facing data*** only. Under no circumstances should
