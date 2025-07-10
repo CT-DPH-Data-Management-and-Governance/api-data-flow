@@ -1,7 +1,16 @@
+from dataops.models import ApplicationSettings
 from dotenv import load_dotenv
 import os
 import sys
 import logging
+
+
+# TODO add some more utitlity around this
+def load_settings():
+    settings = ApplicationSettings()
+
+    return settings
+
 
 # environmental variables/secrets
 logging.info("Attempting to load environmental variables.")
