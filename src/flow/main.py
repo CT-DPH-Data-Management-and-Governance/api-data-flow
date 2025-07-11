@@ -31,7 +31,7 @@ def main():
 
         logging.info("Updating Source metadata.")
         update_source(source)
-        logging.info("Metadata sucessfully updated.")
+        logging.info("Metadata successfully updated.")
 
     else:
         logging.info("No eligible endpoints - ending process.")
