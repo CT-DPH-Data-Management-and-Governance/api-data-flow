@@ -1,8 +1,8 @@
 from dataops.portal import replace_data
 import polars as pl
-import datetime as dt
+from datetime import datetime as dt
 import logging
-from etl import only_new, update_source
+from etl import needs_refresh, update_source
 from fetch import fetch_data, pull_endpoints
 
 logging.basicConfig(
@@ -16,7 +16,7 @@ def main():
     """Entrypoint into the census api data flow app."""
 
     logging.info("Fetching endpoint data.")
-    source = only_new()
+    source = needs_refresh()
 
     if not source.is_empty():
         endpoints = pull_endpoints(source)

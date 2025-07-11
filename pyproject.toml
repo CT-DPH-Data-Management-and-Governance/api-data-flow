@@ -1,5 +1,5 @@
 [project]
-name = "api-data-flow"
+name = "flow"
 version = "0.5.1"
 description = "Manage public data flow"
 readme = "README.md"
