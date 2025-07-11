@@ -1,9 +1,9 @@
-from fetch import fetch_data, pull_endpoints
-from etl import only_new, ship_it, update_source
+from dataops.portal import replace_data
 import polars as pl
 import datetime as dt
 import logging
-
+from etl import only_new, update_source
+from fetch import fetch_data, pull_endpoints
 
 logging.basicConfig(
     level=logging.INFO, format="[%(asctime)s] - %(levelname)s - %(message)s"
@@ -25,15 +25,15 @@ def main():
         lf = fetch_data(endpoints)
         logging.info("Endpoint data lazily loaded.")
 
-        data = lf.with_columns(pl.lit(TODAY).alias("date_pulled")).collect().to_dicts()
+        data = lf.with_columns(pl.lit(TODAY).alias("date_pulled")).collect()
 
         logging.info("Pushing data to the ODP.")
-        ship_it(data)
+        replace_data(data)
         logging.info("Data successfully pushed to the ODP.")
 
         logging.info("Updating Source metadata.")
         update_source(source)
-        logging.info("Metadata successfully updated.")
+        logging.info("Metadata sucessfully updated.")
 
     else:
         logging.info("No eligible endpoints - ending process.")
