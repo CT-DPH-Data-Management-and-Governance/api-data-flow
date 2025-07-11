@@ -3,7 +3,7 @@ import polars as pl
 from datetime import datetime as dt
 import logging
 from etl import needs_refresh, update_source
-from fetch import fetch_data, pull_endpoints
+from api import fetch_data_from_endpoints, pull_endpoints
 
 logging.basicConfig(
     level=logging.INFO, format="[%(asctime)s] - %(levelname)s - %(message)s"
@@ -20,7 +20,7 @@ def main():
 
     if not source.is_empty():
         endpoints = pull_endpoints(source)
-        lf = fetch_data(endpoints)
+        lf = fetch_data_from_endpoints(endpoints)
         logging.info("Endpoint data lazily loaded.")
 
         data = lf.with_columns(pl.lit(DATE_PULLED).alias("date_pulled")).collect()

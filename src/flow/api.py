@@ -3,7 +3,7 @@ import polars as pl
 import logging
 
 
-def fetch_data(endpoints: list[str]) -> pl.LazyFrame:
+def fetch_data_from_endpoints(endpoints: list[str]) -> pl.LazyFrame:
     """
     Retrieve data from census api endpoints, wrangle, and make human-readable.
     """
