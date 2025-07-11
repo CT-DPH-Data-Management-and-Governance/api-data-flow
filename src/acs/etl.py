@@ -14,7 +14,7 @@ def needs_refresh(
     Return a LazyFrame of only new endpoints or ones needing
     a data update according to the refresh variable.
 
-    resfresh uses the polars and datetime offset_by calendar
+    refresh uses the polars and datetime offset_by calendar
     string notation.
     """
 
