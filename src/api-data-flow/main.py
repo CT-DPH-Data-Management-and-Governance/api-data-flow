@@ -9,9 +9,7 @@ logging.basicConfig(
     level=logging.INFO, format="[%(asctime)s] - %(levelname)s - %(message)s"
 )
 
-today = dt.datetime.today().date()
-TODAY = today.strftime("%Y-%m-%d")
-CUTOFF = pl.Series([today]).dt.offset_by("-6mo").item()
+DATE_PULLED = dt.now().strftime("%Y-%m-%d %H:%M:%S")
 
 
 def main():
@@ -25,7 +23,7 @@ def main():
         lf = fetch_data(endpoints)
         logging.info("Endpoint data lazily loaded.")
 
-        data = lf.with_columns(pl.lit(TODAY).alias("date_pulled")).collect()
+        data = lf.with_columns(pl.lit(DATE_PULLED).alias("date_pulled")).collect()
 
         logging.info("Pushing data to the ODP.")
         replace_data(data)
