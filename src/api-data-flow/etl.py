@@ -4,11 +4,6 @@ from fetch import fetch_source
 import polars as pl
 
 
-def ship_it(data: list):
-    with Socrata(DOMAIN, TOKEN, USERNAME, PASSWORD) as client:
-        client.replace(TABLE_TARGET, data)
-
-
 def only_new(cutoff: dt.date = CUTOFF):
     df = fetch_source()
     new = df.with_columns(pl.col("date_last_pulled").str.to_datetime()).filter(
