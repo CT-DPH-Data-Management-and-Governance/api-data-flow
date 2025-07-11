@@ -16,7 +16,7 @@ def main():
     """Entrypoint into the census api data flow app."""
 
     logging.info("Fetching endpoint data.")
-    source = needs_refresh()
+    source = needs_refresh().collect()
 
     if not source.is_empty():
         endpoints = pull_endpoints(source)
