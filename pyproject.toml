@@ -19,3 +19,13 @@ dev = ["pre-commit>=4.2.0"]
 
 [tool.uv.sources]
 dataops = { git = "https://github.com/CT-DPH-Data-Management-and-Governance/api-data-ops.git" }
+
+[tool.uv]
+package = true
+
+[project.scripts]
+flow = "flow.main:main"
+
+[build-system]
+requires = ["uv_build>=0.7.20,<0.8.0"]
+build-backend = "uv_build"

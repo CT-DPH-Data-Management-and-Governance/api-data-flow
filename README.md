@@ -38,11 +38,11 @@ Currently, for ease of reuse, the app expects some environmental variables
 to exist in order to run.
 
 - CENSUS_API_KEY: Your Census API key.
-- TABLE_SOURCE: The Open Data Platform "Four by Four" [Identifier](https://dev.socrata.com/docs/endpoints).
-- TABLE_TARGET: The Destination table for the data on the Open Data Platform.
-- USERNAME: Open Data Platform Username - if needed.
-- PASSWORD: Open Data Platfrom Password - if needed.
-- TOKEN: Open Data Platform Application [token](https://dev.socrata.com/docs/app-tokens.html).
+- SOURCE_ID: The Open Data Platform "Four by Four" [Identifier](https://dev.socrata.com/docs/endpoints).
+- TARGET_ID: The Destination table for the data on the Open Data Platform.
+- SOCRATA_USER: Open Data Platform Username - if needed.
+- SOCRATA_PASS: Open Data Platfrom Password - if needed.
+- SOCRATA_TOKEN: Open Data Platform Application [token](https://dev.socrata.com/docs/app-tokens.html).
 - DOMAIN: Domain name of Portal e.g. [data.ct.gov](https://data.ct.gov)
 
 > Take care not to print, or commit sensitive information and/or 
@@ -61,11 +61,14 @@ on GitHub for steps on how install it your local environment.
     - Clone the repo.
     - Set the required environmental variables.
     - Ensure `uv` is installed. 
-    - Inside of the terminal, `cd` to the repo folder and run `uv run src/api-data-flow/main.py`.
+    - Inside of the terminal `cd` to the repo folder and either:
+        - execute  `uv run flow`.
+        - or  execute `uv run src/flow/main.py`.
 - Docker
     - Clone the repo.
     - Execute the `build.sh` file to build the image.
-    - Execute the `run.sh` file to run the container and pull data from the Census API to your destionation table.
+    - Execute the `run.sh` file to run the container and pull data from the 
+    Census API to your destionation table.
 
 ## Developer Experience
 

@@ -25,39 +25,6 @@ wheels = [
 ]
 
 [[package]]
-name = "flow"
-version = "0.5.1"
-source = { virtual = "." }
-dependencies = [
-    { name = "dataops" },
-    { name = "logging" },
-    { name = "pathlib" },
-    { name = "polars" },
-    { name = "python-dotenv" },
-    { name = "requests" },
-    { name = "sodapy" },
-]
-
-[package.dev-dependencies]
-dev = [
-    { name = "pre-commit" },
-]
-
-[package.metadata]
-requires-dist = [
-    { name = "dataops", git = "https://github.com/CT-DPH-Data-Management-and-Governance/api-data-ops.git" },
-    { name = "logging", specifier = ">=0.4.9.6" },
-    { name = "pathlib", specifier = ">=1.0.1" },
-    { name = "polars", specifier = ">=1.30.0" },
-    { name = "python-dotenv", specifier = ">=1.1.0" },
-    { name = "requests", specifier = ">=2.32.4" },
-    { name = "sodapy", specifier = ">=2.2.0" },
-]
-
-[package.metadata.requires-dev]
-dev = [{ name = "pre-commit", specifier = ">=4.2.0" }]
-
-[[package]]
 name = "asyncio"
 version = "3.4.3"
 source = { registry = "https://pypi.org/simple" }
@@ -191,6 +158,39 @@ sdist = { url = "https://files.pythonhosted.org/packages/0a/10/c23352565a6544bdc
 wheels = [
     { url = "https://files.pythonhosted.org/packages/4d/36/2a115987e2d8c300a974597416d9de88f2444426de9571f4b59b2cca3acc/filelock-3.18.0-py3-none-any.whl", hash = "sha256:c401f4f8377c4464e6db25fff06205fd89bdd83b65eb0488ed1b160f780e21de", size = 16215, upload-time = "2025-03-14T07:11:39.145Z" },
 ]
+
+[[package]]
+name = "flow"
+version = "0.5.1"
+source = { editable = "." }
+dependencies = [
+    { name = "dataops" },
+    { name = "logging" },
+    { name = "pathlib" },
+    { name = "polars" },
+    { name = "python-dotenv" },
+    { name = "requests" },
+    { name = "sodapy" },
+]
+
+[package.dev-dependencies]
+dev = [
+    { name = "pre-commit" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "dataops", git = "https://github.com/CT-DPH-Data-Management-and-Governance/api-data-ops.git" },
+    { name = "logging", specifier = ">=0.4.9.6" },
+    { name = "pathlib", specifier = ">=1.0.1" },
+    { name = "polars", specifier = ">=1.30.0" },
+    { name = "python-dotenv", specifier = ">=1.1.0" },
+    { name = "requests", specifier = ">=2.32.4" },
+    { name = "sodapy", specifier = ">=2.2.0" },
+]
+
+[package.metadata.requires-dev]
+dev = [{ name = "pre-commit", specifier = ">=4.2.0" }]
 
 [[package]]
 name = "h11"

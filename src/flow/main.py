@@ -2,18 +2,18 @@ from dataops.portal import replace_data
 import polars as pl
 from datetime import datetime as dt
 import logging
-from etl import needs_refresh, update_source
-from api import fetch_data_from_endpoints, pull_endpoints
-
-logging.basicConfig(
-    level=logging.INFO, format="[%(asctime)s] - %(levelname)s - %(message)s"
-)
-
-DATE_PULLED = dt.now().strftime("%Y-%m-%d %H:%M:%S")
+from acs.etl import needs_refresh, update_source
+from acs.api import fetch_data_from_endpoints, pull_endpoints
 
 
 def main():
     """Entrypoint into the census api data flow app."""
+
+    logging.basicConfig(
+        level=logging.INFO, format="[%(asctime)s] - %(levelname)s - %(message)s"
+    )
+
+    DATE_PULLED = dt.now().strftime("%Y-%m-%d %H:%M:%S")
 
     logging.info("Fetching endpoint data.")
     source = needs_refresh().collect()
