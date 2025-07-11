@@ -1,6 +1,5 @@
 from dataops.models import CensusAPIEndpoint
 import polars as pl
-from sodapy import Socrata
 import logging
 
 
@@ -45,14 +44,6 @@ def fetch_data(endpoints: list[str]) -> pl.LazyFrame:
     )
 
     return all_frames
-
-
-def fetch_source() -> pl.DataFrame:
-    """Retrieve the source dataframe"""
-    with Socrata(DOMAIN, TOKEN, USERNAME, PASSWORD) as client:
-        source = client.get_all(TABLE_SOURCE)
-
-    return pl.DataFrame(source)
 
 
 def pull_endpoints(df: pl.DataFrame) -> list[str]:
