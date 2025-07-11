@@ -68,7 +68,7 @@ on GitHub for steps on how install it your local environment.
     - Clone the repo.
     - Execute the `build.sh` file to build the image.
     - Execute the `run.sh` file to run the container and pull data from the 
-    Census API to your destionation table.
+    Census API to your destination table.
 
 ## Developer Experience
 
