@@ -1,7 +1,7 @@
 from sodapy import Socrata
 from dataops.portal import fetch_data
 from dataops.models import ApplicationSettings
-import datetime as dt
+from datetime import datetime as dt
 import polars as pl
 
 
@@ -19,12 +19,12 @@ def needs_refresh(
     """
 
     df = fetch_data(source=source, settings=settings)
-    today = dt.datetime.today()
+    today = dt.today()
     new = (
         df.with_columns(pl.col("date_last_pulled").str.to_datetime())
         .with_columns(pl.col("date_last_pulled").dt.offset_by(refresh).alias("refresh"))
         .filter((pl.col("refresh").le(pl.lit(today))) & (pl.col("active").eq("1")))
-        .drop(pl.col(refresh))
+        .drop(pl.col("refresh"))
     )
     return new
 
