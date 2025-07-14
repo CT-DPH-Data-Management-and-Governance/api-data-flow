@@ -1,6 +1,6 @@
 import polars as pl
 from dataops.models import CensusAPIEndpoint
-from acs.api import fetch_data_from_endpoints, pull_endpoints
+from acs.api import fetch_data_from_endpoints
 from datetime import datetime as dt
 
 
