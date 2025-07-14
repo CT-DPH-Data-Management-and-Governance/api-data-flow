@@ -198,3 +198,29 @@ data.filter(pl.col("dataset").ne("acs/acs1/subject")).select(pl.col("concept")).
 # s tables might be messy
 
 # b tables might be fine
+
+# practice split
+
+test_split = pl.DataFrame(
+    {
+        "var_id": ["B25088_001E", "B25088_003E"],
+        "label": [
+            "Estimate!!Median selected monthly owner costs (dollars) --!!Total:",
+            "Estimate!!Median selected monthly owner costs (dollars) --!!Housing units without a mortgage (dollars)",
+        ],
+        "concept": [
+            "Median Selected Monthly Owner Costs (Dollars) by Mortgage Status",
+            "Median Selected Monthly Owner Costs (Dollars) by Mortgage Status",
+        ],
+    }
+)
+
+# split b tables and tidy up
+test_split.with_columns(
+    pl.col("label")
+    .str.split_exact("!!", 2)
+    .struct.rename_fields(["line_type", "concept_base", "stratifier"])
+    .alias("parts")
+).unnest("parts").with_columns(
+    pl.col(pl.String).str.replace_all(r"--|:", "").str.strip_chars().str.to_lowercase()
+)
