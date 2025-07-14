@@ -138,3 +138,63 @@ pivot_vars = [
 b_vars.select(pivot_vars).collect().pivot(
     "line_suffix", index=["line_number", "variable_name", "table_id"], values="value"
 ).sort(["table_id", "line_number"])
+
+
+data.filter(pl.col("dataset").ne("acs/acs1/subject")).select(pl.col("concept")).unique()
+
+
+# if you grab variables from the endpoint with groups
+# e.g. https://api.census.gov/data/2023/acs/acs1/groups/B25088/
+
+
+# you get something like
+
+# "B25088_002M": {
+#   "label": "Margin of Error!!Median selected monthly owner costs (dollars) --!!Housing units with a mortgage (dollars)",
+#   "concept": "Median Selected Monthly Owner Costs (Dollars) by Mortgage Status",
+#   "predicateType": "int",
+#   "group": "B25088",
+#   "limit": 0,
+#   "predicateOnly": true,
+#   "universe": "Owner-occupied housing units"
+# },
+# "B25088_002E": {
+#   "label": "Estimate!!Median selected monthly owner costs (dollars) --!!Housing units with a mortgage (dollars)",
+#   "concept": "Median Selected Monthly Owner Costs (Dollars) by Mortgage Status",
+#   "predicateType": "int",
+#   "group": "B25088",
+#   "limit": 0,
+#   "predicateOnly": true,
+#   "universe": "Owner-occupied housing units"
+# }
+
+# we need to parsae the label better
+# looks like  you have line_type!! concept base !! stratification
+# we already get that first part, don't really need the middle- because covered by base.
+
+# what about s tables?
+
+
+# "S2301_C03_021EA": {
+#   "label": "Annotation of Estimate!!Employment/Population Ratio!!Population 20 to 64 years",
+#   "concept": "Employment Status",
+#   "predicateType": "string",
+#   "group": "S2301",
+#   "limit": 0,
+#   "predicateOnly": true
+# },
+# "S2301_C01_020EA": {
+#   "label": "Annotation of Estimate!!Total!!Population 16 years and over!!RACE AND HISPANIC OR LATINO ORIGIN!!White alone, not Hispanic or Latino",
+#   "concept": "Employment Status",
+#   "predicateType": "string",
+#   "group": "S2301",
+#   "limit": 0,
+#   "predicateOnly": true
+# },
+
+# top one line_type !! loosely concept base? !! stratification
+# bottom one - hmmm -    line_type !! Total!! stratication !! race/eth modifier !! race/eth
+
+# s tables might be messy
+
+# b tables might be fine
