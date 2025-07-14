@@ -1,4 +1,5 @@
 import polars as pl
+from dataops.models import CensusAPIEndpoint
 from acs.api import fetch_data_from_endpoints, pull_endpoints
 from datetime import datetime as dt
 
@@ -44,6 +45,19 @@ def test_endpoints():
     ]
 
 
+var_test = (
+    "https://api.census.gov/data/2023/acs/acs1?get=group(B19013H)&ucgid=0400000US09"
+    # "https://api.census.gov/data/2023/acs/acs1/subject?get=group(S2301)&ucgid=0400000US09"
+)
+
+tv = CensusAPIEndpoint.from_url(var_test)
+
+tv.url_no_key
+tv.variable_url
+tv.fetch_all_variable_labels()
+tv.fetch_variable_labels()
+
+
 # approx main pre platfrom etl
 DATE_PULLED = dt.now().strftime("%Y-%m-%d %H:%M:%S")
 
@@ -80,13 +94,20 @@ common_line_expr = (
     pl.col("line_id").str.slice(3).alias("line_suffix"),
 )
 
+
 core = data.lazy().select(var_cols).with_columns(table_type_expr)
 
 b_vars = (
     core.filter(pl.col("table_type").eq("B"))
     .with_columns(b_table_split_expr)
     .unnest("parts")
+    .with_columns(common_var_meta_expr)
     .with_columns(common_line_expr)
+    .with_columns(
+        pl.lit(None).cast(pl.Int64).alias("column_number"),
+        pl.lit(None).cast(pl.String).alias("column_id"),
+        pl.col(pl.String).replace("", None),
+    )
 )
 
 s_vars = (
@@ -96,7 +117,9 @@ s_vars = (
     .with_columns(
         pl.col("column_id").str.slice(-2).str.to_integer().alias("column_number"),
     )
+    .with_columns(common_var_meta_expr)
     .with_columns(common_line_expr)
+    .with_columns(pl.col(pl.String).replace("", None))
 )
 
 b_vars.head().collect()
