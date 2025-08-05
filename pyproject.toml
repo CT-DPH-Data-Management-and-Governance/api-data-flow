@@ -18,7 +18,7 @@ dependencies = [
 dev = ["pre-commit>=4.2.0"]
 
 [tool.uv.sources]
-dataops = { git = "https://github.com/CT-DPH-Data-Management-and-Governance/api-data-ops.git" }
+dataops = { git = "https://github.com/CT-DPH-Data-Management-and-Governance/api-data-ops.git", branch = "release" }
 
 [tool.uv]
 package = true

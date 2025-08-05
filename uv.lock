@@ -110,7 +110,7 @@ wheels = [
 [[package]]
 name = "dataops"
 version = "0.3.1"
-source = { git = "https://github.com/CT-DPH-Data-Management-and-Governance/api-data-ops.git#8f8cf50f14c69c79485c9191de863c840a713fe4" }
+source = { git = "https://github.com/CT-DPH-Data-Management-and-Governance/api-data-ops.git?branch=release#f5a2a97095fd257cf0fdbe36cad3c1e5297617ee" }
 dependencies = [
     { name = "asyncio" },
     { name = "bs4" },
@@ -180,7 +180,7 @@ dev = [
 
 [package.metadata]
 requires-dist = [
-    { name = "dataops", git = "https://github.com/CT-DPH-Data-Management-and-Governance/api-data-ops.git" },
+    { name = "dataops", git = "https://github.com/CT-DPH-Data-Management-and-Governance/api-data-ops.git?branch=release" },
     { name = "logging", specifier = ">=0.4.9.6" },
     { name = "pathlib", specifier = ">=1.0.1" },
     { name = "polars", specifier = ">=1.30.0" },

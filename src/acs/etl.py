@@ -1,6 +1,6 @@
 from sodapy import Socrata
-from dataops.portal import fetch_data
-from dataops.models import ApplicationSettings
+from dataops.socrata.data import fetch_data
+from dataops.settings.flow import AppSettings
 from datetime import datetime as dt
 import polars as pl
 
@@ -8,7 +8,7 @@ import polars as pl
 def needs_refresh(
     source: str | None = None,
     refresh: str = "1y",
-    settings: ApplicationSettings | None = None,
+    settings: AppSettings | None = None,
 ) -> pl.LazyFrame:
     """
     Return a LazyFrame of only new endpoints or ones needing
@@ -32,11 +32,11 @@ def needs_refresh(
 def update_source(
     data: pl.DataFrame | pl.LazyFrame,
     source: str | None = None,
-    settings: ApplicationSettings | None = None,
+    settings: AppSettings | None = None,
 ) -> pl.LazyFrame:
     """Update the endpoint source date last pulled based on row id."""
     if settings is None:
-        settings = ApplicationSettings()
+        settings = AppSettings()
 
     if source is None:
         source = settings.source_id

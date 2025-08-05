@@ -1,4 +1,4 @@
-from dataops.models import CensusAPIEndpoint
+from dataops.apis.acs import APIEndpoint, APIData
 import polars as pl
 import logging
 
@@ -12,8 +12,9 @@ def fetch_data_from_endpoints(endpoints: list[str]) -> pl.LazyFrame:
 
     for endpoint in endpoints:
         logging.info(f"Fetching data from URL: {endpoint}")
-        df = CensusAPIEndpoint.from_url(endpoint).fetch_tidy_data().lazy()
-        all_frames.append(df)
+        endpoint = APIEndpoint.from_url(endpoint)
+        endpoint_data = APIData(endpoint=endpoint).long()
+        all_frames.append(endpoint_data)
 
     all_frames = pl.concat(all_frames)
 
