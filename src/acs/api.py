@@ -45,9 +45,3 @@ def fetch_data_from_endpoints(endpoints: list[str]) -> pl.LazyFrame:
     )
 
     return all_frames
-
-
-def pull_endpoints(df: pl.DataFrame) -> list[str]:
-    """Retrieve a list of public census api endpoints."""
-
-    return df.select(pl.col("endpoint").struct.unnest()).to_series().to_list()
