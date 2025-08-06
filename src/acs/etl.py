@@ -18,15 +18,26 @@ def needs_refresh(
     string notation.
     """
 
-    df = fetch_data(source=source, settings=settings)
+    if settings is None:
+        settings = AppSettings()
+
+    if source is None:
+        source = settings.api.source.id
+
+    data = fetch_data(source=source, settings=settings)
     today = dt.today()
-    new = (
-        df.with_columns(pl.col("date_last_pulled").str.to_datetime())
+
+    output = (
+        data.with_columns(pl.col("date_last_pulled").str.to_datetime())
         .with_columns(pl.col("date_last_pulled").dt.offset_by(refresh).alias("refresh"))
         .filter((pl.col("refresh").le(pl.lit(today))) & (pl.col("active").eq("1")))
         .drop(pl.col("refresh"))
+        # enforce laziness and cache regardless of fetch_data output
+        .lazy()
+        .collect()
+        .lazy()
     )
-    return new
+    return output
 
 
 def update_source(
@@ -35,11 +46,12 @@ def update_source(
     settings: AppSettings | None = None,
 ) -> pl.LazyFrame:
     """Update the endpoint source date last pulled based on row id."""
+
     if settings is None:
         settings = AppSettings()
 
     if source is None:
-        source = settings.source_id
+        source = settings.api.source.id
 
     now = dt.now().strftime("%Y-%m-%d %H:%M:%S")
 
@@ -47,10 +59,10 @@ def update_source(
     dict_new = new.collect().to_dicts()
 
     with Socrata(
-        settings.domain,
-        settings.socrata_token,
-        settings.socrata_user,
-        settings.socrata_pass,
+        settings.api.domain,
+        settings.account.token.get_secret_value(),
+        settings.account.username,
+        settings.account.password.get_secret_value(),
     ) as client:
         client.upsert(source, dict_new)
 
