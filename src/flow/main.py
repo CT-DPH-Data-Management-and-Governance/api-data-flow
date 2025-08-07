@@ -7,15 +7,15 @@ from acs.api import fetch_data_from_endpoints
 from dataops.socrata.data import pull_endpoints
 
 
-# refresh the data how long after last pull?
-refresh_wait = "1w"
-
-# active rows only, or everything (for testing)
-active_rows = False
-
-
-def main(refresh_wait: str = refresh_wait, active_rows: bool = active_rows):
+def main():
     """Entrypoint into the census acs api data flow app."""
+
+    # for debug and testing
+    # refresh the data how long after last pull?
+    refresh_wait = "1w"
+
+    # active rows only, or everything (for testing)
+    active_rows = False
 
     logging.basicConfig(
         level=logging.INFO, format="[%(asctime)s] - %(levelname)s - %(message)s"
