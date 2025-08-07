@@ -18,30 +18,30 @@ def fetch_data_from_endpoints(endpoints: list[str]) -> pl.LazyFrame:
 
     all_frames = pl.concat(all_frames)
 
-    with_iid = all_frames.drop(["row_id", "date_pulled"]).with_columns(
-        pl.struct(
-            "dataset",
-            "year",
-            "concept",
-            "geo_id",
-            "ucgid",
-            "geo_name",
-            "variable_id",
-            "variable_name",
-            "value",
-            "value_type",
-        )
-        .hash()
-        .alias("instance_id")
-    )
+    # with_iid = all_frames.drop(["row_id", "date_pulled"]).with_columns(
+    #     pl.struct(
+    #         "dataset",
+    #         "year",
+    #         "concept",
+    #         "geo_id",
+    #         "ucgid",
+    #         "geo_name",
+    #         "variable_id",
+    #         "variable_name",
+    #         "value",
+    #         "value_type",
+    #     )
+    #     .hash()
+    #     .alias("instance_id")
+    # )
 
-    url_id = with_iid.select(pl.col("full_url"), pl.col("instance_id")).unique()
+    # url_id = with_iid.select(pl.col("full_url"), pl.col("instance_id")).unique()
 
-    all_frames = (
-        with_iid.drop("full_url")
-        .unique()
-        .join(url_id, on="instance_id")
-        .with_row_index("row_id")
-    )
+    # all_frames = (
+    #     with_iid.drop("full_url")
+    #     .unique()
+    #     .join(url_id, on="instance_id")
+    #     .with_row_index("row_id")
+    # )
 
     return all_frames

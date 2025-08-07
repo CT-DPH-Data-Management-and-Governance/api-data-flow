@@ -7,24 +7,31 @@ from acs.api import fetch_data_from_endpoints
 from dataops.socrata.data import pull_endpoints
 
 
-def main():
-    """Entrypoint into the census api data flow app."""
+# refresh the data how long after last pull?
+refresh_wait = "1w"
+
+# active rows only, or everything (for testing)
+active_rows = False
+
+
+def main(refresh_wait: str = refresh_wait, active_rows: bool = active_rows):
+    """Entrypoint into the census acs api data flow app."""
 
     logging.basicConfig(
         level=logging.INFO, format="[%(asctime)s] - %(levelname)s - %(message)s"
     )
 
-    DATE_PULLED = dt.now().strftime("%Y-%m-%d %H:%M:%S")
+    date_pulled = dt.now().strftime("%Y-%m-%d %H:%M:%S")
 
     logging.info("Fetching endpoint data.")
-    source = needs_refresh().collect()
+    source = needs_refresh(refresh=refresh_wait, active_only=active_rows).collect()
 
     if not source.is_empty():
         endpoints = pull_endpoints(source)
         lf = fetch_data_from_endpoints(endpoints)
         logging.info("Endpoint data lazily loaded.")
 
-        data = lf.with_columns(pl.lit(DATE_PULLED).alias("date_pulled")).collect()
+        data = lf.with_columns(pl.lit(date_pulled).alias("date_pulled")).collect()
 
         logging.info("Pushing data to the ODP.")
         replace_data(data)

@@ -7,6 +7,7 @@ import polars as pl
 
 def needs_refresh(
     source: str | None = None,
+    active_only: bool = True,
     refresh: str = "1y",
     settings: AppSettings | None = None,
 ) -> pl.LazyFrame:
@@ -30,13 +31,20 @@ def needs_refresh(
     output = (
         data.with_columns(pl.col("date_last_pulled").str.to_datetime())
         .with_columns(pl.col("date_last_pulled").dt.offset_by(refresh).alias("refresh"))
-        .filter((pl.col("refresh").le(pl.lit(today))) & (pl.col("active").eq("1")))
-        .drop(pl.col("refresh"))
-        # enforce laziness and cache regardless of fetch_data output
-        .lazy()
-        .collect()
-        .lazy()
+        .filter(pl.col("refresh").le(pl.lit(today)))
     )
+
+    if active_only:
+        output = (
+            output.filter(pl.col("active").eq("1"))
+            .drop(pl.col("refresh"))
+            .lazy()
+            .collect()
+            .lazy()
+        )
+    else:
+        output = output.drop(pl.col("refresh")).lazy().collect().lazy()
+
     return output
 
 
