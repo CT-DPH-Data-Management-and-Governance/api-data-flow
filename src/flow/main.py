@@ -35,6 +35,7 @@ def main():
         endpoints = pull_endpoints(source)
 
         # TODO join breaks because of html encoding - fix
+        # TODO add "question" id
         lf = fetch_data_from_endpoints(endpoints).join(
             endpoint_ids, on="endpoint", how="left"
         )
