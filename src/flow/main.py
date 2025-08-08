@@ -26,20 +26,29 @@ def main():
     logging.info("Fetching endpoint data.")
     source = needs_refresh(refresh=refresh_wait, active_only=active_rows).collect()
 
+    endpoint_ids = source.select(
+        pl.col("endpoint").struct.unnest().alias("endpoint"),
+        pl.col("row_id").cast(pl.Int32).alias("socrata_endpoint_id"),
+    ).lazy()
+
     if not source.is_empty():
         endpoints = pull_endpoints(source)
-        lf = fetch_data_from_endpoints(endpoints)
+
+        # TODO join breaks because of html encoding - fix
+        lf = fetch_data_from_endpoints(endpoints).join(
+            endpoint_ids, on="endpoint", how="left"
+        )
         logging.info("Endpoint data lazily loaded.")
 
-        data = lf.with_columns(pl.lit(date_pulled).alias("date_pulled")).collect()
+        # data = lf.with_columns(pl.lit(date_pulled).alias("date_pulled")).collect()
 
-        logging.info("Pushing data to the ODP.")
-        replace_data(data)
-        logging.info("Data successfully pushed to the ODP.")
+        # logging.info("Pushing data to the ODP.")
+        # replace_data(data)
+        # logging.info("Data successfully pushed to the ODP.")
 
-        logging.info("Updating Source metadata.")
-        update_source(source)
-        logging.info("Metadata successfully updated.")
+        # logging.info("Updating Source metadata.")
+        # update_source(source)
+        # logging.info("Metadata successfully updated.")
 
     else:
         logging.info("No eligible endpoints - ending process.")
