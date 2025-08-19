@@ -1,8 +1,7 @@
-from dataops.socrata.data import replace_data
 import polars as pl
 from datetime import datetime as dt
 import logging
-from acs.etl import needs_refresh, update_source
+from acs.etl import needs_refresh
 from acs.api import fetch_data_from_endpoints
 from dataops.socrata.data import pull_endpoints
 
