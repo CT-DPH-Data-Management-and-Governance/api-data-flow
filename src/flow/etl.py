@@ -1,3 +1,5 @@
+from dataops.apis.acs import APIEndpoint, APIData
+import logging
 from sodapy import Socrata
 from dataops.socrata.data import fetch_data
 from dataops.settings.flow import AppSettings
@@ -96,3 +98,19 @@ def update_source(
         client.upsert(source, dict_new)
 
     return new
+
+
+def fetch_data_from_endpoints(endpoints: list[str]) -> pl.LazyFrame:
+    """
+    Retrieve data from census api endpoints, wrangle, and make human-readable.
+    """
+
+    all_frames = []
+
+    for endpoint in endpoints:
+        logging.info(f"Fetching data from URL: {endpoint}")
+        endpoint = APIEndpoint.from_url(endpoint)
+        endpoint_data = APIData(endpoint=endpoint).long()
+        all_frames.append(endpoint_data)
+
+    all_frames = pl.concat(all_frames)
