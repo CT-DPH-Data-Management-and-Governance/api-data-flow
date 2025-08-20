@@ -15,7 +15,10 @@ dependencies = [
 ]
 
 [dependency-groups]
-dev = ["pre-commit>=4.2.0"]
+dev = [
+    "marimo>=0.14.17",
+    "pre-commit>=4.2.0",
+]
 
 [tool.uv.sources]
 dataops = { git = "https://github.com/CT-DPH-Data-Management-and-Governance/api-data-ops.git" }
