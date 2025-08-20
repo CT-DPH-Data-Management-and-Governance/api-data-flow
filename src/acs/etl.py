@@ -5,6 +5,27 @@ from datetime import datetime as dt
 import polars as pl
 
 
+def fetch_endpoints(
+    source: str | None = None,
+    settings: AppSettings | None = None,
+) -> pl.LazyFrame:
+    """
+    Return a LazyFrame of all the endpoints.
+    """
+
+    if settings is None:
+        settings = AppSettings()
+
+    if source is None:
+        source = settings.api.source.id
+
+    data = fetch_data(source=source, settings=settings)
+
+    output = data.with_columns(pl.col("date_last_pulled").str.to_datetime())
+
+    return output
+
+
 def needs_refresh(
     source: str | None = None,
     active_only: bool = True,
