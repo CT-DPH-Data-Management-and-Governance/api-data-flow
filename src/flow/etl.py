@@ -114,3 +114,5 @@ def fetch_data_from_endpoints(endpoints: list[str]) -> pl.LazyFrame:
         all_frames.append(endpoint_data)
 
     all_frames = pl.concat(all_frames)
+
+    return all_frames
