@@ -8,14 +8,14 @@ dependencies = [
   "dataops",
   "logging>=0.4.9.6",
   "pathlib>=1.0.1",
-  "polars>=1.30.0",
-  "python-dotenv>=1.1.0",
-  "requests>=2.32.4",
+  "polars>=1.39.3",
+  "python-dotenv>=1.2.2",
+  "requests>=2.33.1",
   "sodapy>=2.2.0",
 ]
 
 [dependency-groups]
-dev = ["pre-commit>=4.2.0"]
+dev = ["pre-commit>=4.5.1"]
 
 [tool.uv.sources]
 dataops = { git = "https://github.com/CT-DPH-Data-Management-and-Governance/api-data-ops.git" }
@@ -27,5 +27,5 @@ package = true
 flow = "flow.main:main"
 
 [build-system]
-requires = ["uv_build>=0.7.20,<0.10.0"]
+requires = ["uv_build>=0.11.6,<0.12.0"]
 build-backend = "uv_build"
